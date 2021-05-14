@@ -1,0 +1,98 @@
+package Caesar;
+import java.util.Scanner;
+/**
+ * Caesar kĂłdolĂˇs 01
+ * MinĹ‘sĂ©gbiztosĂ­tĂˇs InformatikĂˇja tĂˇrgy gyakorlati feladata
+ * 
+ * @author FĂĽlĂ¶p Katalin
+ * @author hallgatĂł
+ * KĂ©szĂ­tsĂĽnk kĂłdolĂł Ă©s dekĂłdolĂł fĂĽggvĂ©nyt az alĂˇbbiak szerint: 
+ * Ĺ±A kĂłd felĂ©pĂ­tĂ©se: az elsĹ‘ karakternek a kĂłdja a karakter ASCII Ă©rtĂ©ke.
+ * A kĂ¶vetkezĹ‘ szĂˇmok kĂłdja az elĹ‘zĹ‘ karakter ASCII kĂłdjĂˇtĂłl valĂł eltĂ©rĂ©s, 
+ * zpl.: A + 2 â†’ C, vagy z - 1 â†’ y
+ */
+public class caesar {
+
+  public static String encode(String message, int shift) {
+    String encoded = "";
+
+    shift %= 26;
+
+    final int length = message.length();
+    for (int i = 0; i < length; i++) {
+      char current = message.charAt(i); // Java law : char + int = char
+
+      if (IsCapitalLatinLetter(current)) {
+
+        current += shift;
+        encoded += (char) (current > 'Z' ? current - 26 : current); // 26 = number of latin letters
+
+      } else if (IsSmallLatinLetter(current)) {
+
+        current += shift;
+        encoded += (char) (current > 'z' ? current - 26 : current); // 26 = number of latin letters
+
+      } else {
+        encoded += current;
+      }
+    }
+    return encoded;
+  }
+
+  public static String decode(String encryptedMessage, int shift) {
+    String decoded = "";
+
+    shift %= 26;
+
+    final int length = encryptedMessage.length();
+    for (int i = 0; i < length; i++) {
+      char current = encryptedMessage.charAt(i);
+      if (IsCapitalLatinLetter(current)) {
+
+        current -= shift;
+        decoded += (char) (current < 'A' ? current + 26 : current); // 26 = number of latin letters
+
+      } else if (IsSmallLatinLetter(current)) {
+
+        current -= shift;
+        decoded += (char) (current < 'a' ? current + 26 : current); // 26 = number of latin letters
+
+      } else {
+        decoded += current;
+      }
+    }
+    return decoded;
+  }
+
+  private static boolean IsCapitalLatinLetter(char c) {
+    return c >= 'A' && c <= 'Z';
+  }
+
+  private static boolean IsSmallLatinLetter(char c) {
+    return c >= 'a' && c <= 'z';
+  }
+
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    System.out.println("KĂ©rem adja meg a latin abc egy betĹ±jĂ©t:  ");
+    String message = input.nextLine();
+    System.out.println(message);
+    System.out.println("KĂ©rem adjon meg egy eltolĂˇsi szĂˇmot: ");
+    int shift = input.nextInt() % 26;
+    System.out.println("(K)kĂłdolĂˇs or (D)dekĂłdolĂˇs ?");
+    char choice = input.next().charAt(0);
+    switch (choice) {
+      case 'K':
+      case 'k':
+        System.out.println(
+            "KĂłdolt ĂĽzenete: \n" + encode(message, shift));
+        break;
+      case 'D':
+      case 'd':
+        System.out.println("DekĂłdolt ĂĽzenete \n" + decode(message, shift));
+      default:
+        System.out.println("alapĂ©rtelmezett eset");
+    }
+    input.close();
+  }
+}
